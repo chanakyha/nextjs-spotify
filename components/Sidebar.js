@@ -1,4 +1,6 @@
 import {
+  ArrowCircleLeftIcon,
+  ArrowCircleRightIcon,
   HeartIcon,
   HomeIcon,
   LibraryIcon,
@@ -6,8 +8,14 @@ import {
   RssIcon,
   SearchIcon,
 } from "@heroicons/react/outline";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 export default function Sidebar() {
+  const { data: session, status } = useSession();
+  console.log(session);
+
+  const router = useRouter();
   return (
     <div className="text-gray-500 p-5 text-sm border-r border-gray-900">
       <div className="space-y-4">
@@ -36,6 +44,24 @@ export default function Sidebar() {
           <RssIcon className="w-5 h-5" />
           <p>Your Episodes</p>
         </button>
+        {!session ? (
+          <button
+            onClick={() => router.push("/login")}
+            className="flex rounded-md text-green-500 font-medium bg-green-800/20 p-2 items-center active:scale-90 duration-100 ease-out transition-all gap-2 hover:text-green-900"
+          >
+            <ArrowCircleRightIcon className="w-5 h-5" />
+            <p>Login</p>
+          </button>
+        ) : (
+          <button
+            onClick={() => signOut()}
+            className="flex rounded-md text-red-500 font-medium bg-red-800/20 p-2 items-center active:scale-90 duration-100 ease-out transition-all gap-2 hover:text-red-900"
+          >
+            <ArrowCircleLeftIcon className="w-5 h-5" />
+            <p>Logout</p>
+          </button>
+        )}
+
         <hr className="border-t-[0.1px] border-gray-900" />
 
         {/* Playlists */}
