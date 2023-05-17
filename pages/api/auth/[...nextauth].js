@@ -42,6 +42,7 @@ export default NextAuth({
   pages: {
     signIn: "/login",
   },
+
   callbacks: {
     async jwt({ token, account, user }) {
       if (account && user) {
