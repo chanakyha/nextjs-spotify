@@ -1,3 +1,4 @@
+import useSpotify from "@/hooks/useSpotify";
 import {
   ArrowCircleLeftIcon,
   ArrowCircleRightIcon,
@@ -10,10 +11,21 @@ import {
 } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 export default function Sidebar() {
   const { data: session, status } = useSession();
-  console.log(session);
+  const spotifyAPI = useSpotify();
+  const [playlist, setPlaylist] = useState([]);
+
+  useEffect(() => {
+    if (spotifyAPI.getAccessToken()) {
+      spotifyAPI.getUserPlaylists().then((playlists) => {
+        setPlaylist(playlists);
+        console.log(playlists);
+      });
+    }
+  }, [session, spotifyAPI]);
 
   const router = useRouter();
   return (

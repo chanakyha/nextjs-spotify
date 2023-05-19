@@ -48,15 +48,16 @@ export default NextAuth({
       if (account && user) {
         return {
           ...token,
-          accessToken: account.accessToken,
-          refreshToken: account.refreshToken,
-          username: account.providerAccountID,
+          accessToken: account.access_token,
+          refreshToken: account.refresh_token,
+          username: account.providerAccountId,
           accessTokenExpires: account.expires_at * 1000,
         };
       }
 
       if (Date.now() < token.accessTokenExpires) {
         console.log("token is valid");
+        console.log();
         return token;
       }
 

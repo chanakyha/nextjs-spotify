@@ -23,14 +23,17 @@ export default function Center() {
   return (
     <div className="flex-grow">
       <header className="absolute top-5 right-8">
-        <div className="flex items-center p-1 pr-2 rounded-full bg-black gap-3 opacity-90 hover:opacity-80 cursor-pointer">
-          <Image
-            className="rounded-full w-10 h-10"
-            width={1080}
-            height={1920}
-            alt="profile-pic"
-            src={session?.user?.image}
-          />
+        <div className="flex text-white items-center p-1 pr-2 rounded-full bg-black gap-3 opacity-90 hover:opacity-80 cursor-pointer">
+          {session && (
+            <Image
+              className="rounded-full w-10 h-10"
+              width={1080}
+              height={1920}
+              alt="profile-pic"
+              src={session?.user?.image}
+            />
+          )}
+
           <h2>{session?.user?.name}</h2>
           <ChevronDownIcon className="h-5 w-5" />
         </div>
