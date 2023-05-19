@@ -1,32 +1,30 @@
 import { ChevronDownIcon } from "@heroicons/react/outline";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { shuffle } from "lodash";
+import { useCallback, useEffect, useState } from "react";
+
 import { useRecoilState, useRecoilValue } from "recoil";
 import { playListAtom, playlistIDState } from "@/atoms/playlistAtom";
+import useImageColor from "use-image-color";
 import useSpotify from "@/hooks/useSpotify";
 import Songs from "./Songs";
 
 export default function Center() {
   const { data: session } = useSession();
-  const [color, setColor] = useState(null);
   const playlistID = useRecoilValue(playlistIDState);
   const spotidyAPI = useSpotify();
   const [playlist, setPlaylist] = useRecoilState(playListAtom);
 
-  const colors = [
-    "from-red-500",
-    "from-green-500",
-    "from-blue-500",
-    "from-yellow-500",
-    "from-purple-500",
-    "from-pink-500",
-  ];
+  const { colors: imageColor } = useImageColor(playlist?.images?.[0]?.url, {
+    cors: true,
+    colors: 5,
+  });
+
+  const colors = imageColor?.[1];
 
   useEffect(() => {
-    setColor(shuffle(colors).pop());
-  }, [playlistID]);
+    console.log("Colors");
+  }, [colors]);
 
   useEffect(() => {
     if (spotidyAPI.getAccessToken()) {
@@ -41,11 +39,13 @@ export default function Center() {
     }
   }, [spotidyAPI, playlistID]);
 
-  console.log(playlist);
   return (
     <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
       <header className="absolute top-5 right-8">
-        <div className="flex text-white items-center p-1 pr-2 rounded-full bg-black gap-3 opacity-90 hover:opacity-80 cursor-pointer">
+        <div
+          onClick={() => signOut()}
+          className="flex text-white items-center p-1 pr-2 rounded-full bg-black gap-3 opacity-90 hover:opacity-80 cursor-pointer"
+        >
           {session && (
             <Image
               className="rounded-full w-10 h-10"
@@ -62,7 +62,10 @@ export default function Center() {
       </header>
 
       <section
-        className={`flex items-end space-x-7 bg-gradient-to-b to-black ${color} h-80 text-white p-8`}
+        style={{
+          backgroundImage: `linear-gradient(to bottom, ${colors}, #000)`,
+        }}
+        className={`flex items-end space-x-7  h-80 text-white p-8`}
       >
         {playlist?.images && (
           <img

@@ -1,8 +1,6 @@
 import { playlistIDState } from "@/atoms/playlistAtom";
 import useSpotify from "@/hooks/useSpotify";
 import {
-  ArrowCircleLeftIcon,
-  ArrowCircleRightIcon,
   HeartIcon,
   HomeIcon,
   LibraryIcon,
@@ -10,13 +8,13 @@ import {
   RssIcon,
   SearchIcon,
 } from "@heroicons/react/outline";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
 export default function Sidebar() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const spotifyAPI = useSpotify();
   const [playlists, setPlaylists] = useState([]);
   const [playlistID, setPlaylistId] = useRecoilState(playlistIDState);
@@ -25,6 +23,7 @@ export default function Sidebar() {
     if (spotifyAPI.getAccessToken()) {
       spotifyAPI.getUserPlaylists().then((playlistItems) => {
         setPlaylists(playlistItems.body.items);
+        setPlaylistId(playlistItems.body.items[0].id);
       });
     }
   }, [session, spotifyAPI]);
@@ -58,23 +57,6 @@ export default function Sidebar() {
           <RssIcon className="w-5 h-5" />
           <p>Your Episodes</p>
         </button>
-        {!session ? (
-          <button
-            onClick={() => router.push("/login")}
-            className="flex rounded-md text-green-500 font-medium bg-green-800/20 p-2 items-center active:scale-90 duration-100 ease-out transition-all gap-2 hover:text-green-900"
-          >
-            <ArrowCircleRightIcon className="w-5 h-5" />
-            <p>Login</p>
-          </button>
-        ) : (
-          <button
-            onClick={() => signOut()}
-            className="flex rounded-md text-red-500 font-medium bg-red-800/20 p-2 items-center active:scale-90 duration-100 ease-out transition-all gap-2 hover:text-red-900"
-          >
-            <ArrowCircleLeftIcon className="w-5 h-5" />
-            <p>Logout</p>
-          </button>
-        )}
 
         <hr className="border-t-[0.1px] border-gray-900" />
         <p className="font-bold text-slate-500 uppercase">Playlists</p>
