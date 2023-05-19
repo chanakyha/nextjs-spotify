@@ -31,7 +31,7 @@ export default function Sidebar() {
 
   const router = useRouter();
   return (
-    <div className="text-gray-500 p-5 lg:text-sm text-xs sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex border-r border-gray-900 overflow-y-scroll scrollbar-hide h-screen">
+    <div className="text-gray-500 pb-36 p-5 lg:text-sm text-xs sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex border-r border-gray-900 overflow-y-scroll scrollbar-hide h-screen">
       <div className="space-y-4">
         <button className="flex items-center gap-2 hover:text-white">
           <HomeIcon className="w-5 h-5" />
