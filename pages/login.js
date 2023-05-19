@@ -1,4 +1,4 @@
-import { getProviders, signIn } from "next-auth/react";
+import { getProviders, getSession, signIn } from "next-auth/react";
 import Image from "next/image";
 
 export default function Login({ providers }) {
@@ -32,6 +32,17 @@ export default function Login({ providers }) {
 
 export async function getServerSideProps(context) {
   const providers = await getProviders();
+
+  const session = await getSession(context);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {

@@ -4,7 +4,6 @@ import SpotifyProvider from "next-auth/providers/spotify";
 
 const refreshAccessToken = async () => {
   try {
-    console.log(LOGIN_URL);
     spotifyAPI.setAccessToken(token.accessToken);
     spotifyAPI.setRefreshToken(token.refreshToken);
 
@@ -39,6 +38,7 @@ export default NextAuth({
     // ...add more providers here
   ],
   secret: process.env.JWT_SECRET,
+  encryption: true,
   pages: {
     signIn: "/login",
   },

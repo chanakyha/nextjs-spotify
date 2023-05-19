@@ -14,8 +14,10 @@ import {
   ReplyIcon,
   VolumeUpIcon,
 } from "@heroicons/react/solid";
+import { debounce } from "lodash";
+
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
 export default function Player() {
@@ -48,6 +50,18 @@ export default function Player() {
       setVolume(50);
     }
   }, [currentTrackId, spotifyAPI, session]);
+
+  useEffect(() => {
+    if (0 < volume < 100) {
+      debounceAdjustVolume(volume);
+    }
+  }, [volume]);
+
+  const debounceAdjustVolume = useCallback(() => {
+    debounce(() => {
+      spotifyAPI.setVolume(volume).catch((err) => {});
+    }, 500);
+  }, [volume]);
 
   const handlePlayPause = () => {
     spotifyAPI.getMyCurrentPlaybackState(currentTrackId).then((data) => {
