@@ -16,7 +16,6 @@ export default function useSpotify() {
         signIn();
       }
 
-      console.log(session);
       spotifyAPI.setAccessToken(session.user.accessToken);
     }
   }, [session]);
